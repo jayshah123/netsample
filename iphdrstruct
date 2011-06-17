@@ -1,0 +1,50 @@
+//ns2 ip hdr structure
+/*    src/ns-2.34/common/ip.h  */
+
+struct hdr_ip {
+    /* common to IPv{4,6} */
+    ns_addr_t    src_;
+    ns_addr_t    dst_;
+    int        ttl_;
+
+    /* Monarch extn */
+//     u_int16_t    sport_;
+//     u_int16_t    dport_;
+   
+    /* IPv6 */
+    int        fid_;    /* flow id */
+    int        prio_;
+
+    static int offset_;
+    inline static int& offset() { return offset_; }
+    inline static hdr_ip* access(const Packet* p) {
+        return (hdr_ip*) p->access(offset_);
+    }
+
+//ip structure in linux
+
+/*  /usr/include/netinet/ip.h  */
+
+
+struct iphdr
+  {
+#if __BYTE_ORDER == __LITTLE_ENDIAN
+    unsigned int ihl:4;
+    unsigned int version:4;
+#elif __BYTE_ORDER == __BIG_ENDIAN
+    unsigned int version:4;
+    unsigned int ihl:4;
+#else
+# error "Please fix <bits/endian.h>"
+#endif
+    u_int8_t tos;
+    u_int16_t tot_len;
+    u_int16_t id;
+    u_int16_t frag_off;
+    u_int8_t ttl;
+    u_int8_t protocol;
+    u_int16_t check;
+    u_int32_t saddr;
+    u_int32_t daddr;
+    /*The options start here. */
+  };
